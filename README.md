@@ -33,7 +33,7 @@ Pemeriksaan berjalan serial, dengan jeda dan batas jumlah nomor. Pembatasan otom
 
 ## Konfigurasi
 
-Salin `.env.example` ke `.env`. `ALLOWED_SENDERS` wajib diatur sebagai daftar nomor pengirim dipisah koma. Sesuaikan `MAX_NUMBERS`, `CHECK_DELAY_MS`, `CHECK_TIMEOUT_MS`, dan `MAX_COMMANDS_PER_MINUTE` bila diperlukan. `.env` dan data sesi tidak boleh dimasukkan ke git.
+Salin `.env.example` ke `.env`. Aplikasi memuat file ini otomatis saat start menggunakan `dotenv`. `ALLOWED_SENDERS` wajib diatur sebagai daftar nomor PENGIRIM yang diizinkan menjalankan `/detect`, dalam digit internasional tanpa `+`; nomor pengirim yang menjalankan command harus cocok dengan salah satu entri. Pisahkan beberapa pengirim dengan koma. Sesuaikan `MAX_NUMBERS`, `CHECK_DELAY_MS`, `CHECK_TIMEOUT_MS`, dan `MAX_COMMANDS_PER_MINUTE` bila diperlukan. `.env` dan data sesi tidak boleh dimasukkan ke git.
 
 ## Batasan dan pemecahan masalah
 

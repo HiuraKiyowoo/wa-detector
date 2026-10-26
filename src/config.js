@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 const positiveInt = (name, fallback, min = 1, max = 1000) => {
   const parsed = Number.parseInt(process.env[name] ?? String(fallback), 10)
   return Number.isInteger(parsed) && parsed >= min && parsed <= max ? parsed : fallback
