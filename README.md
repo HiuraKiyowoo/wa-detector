@@ -11,7 +11,7 @@ mkdir -p ~/wa-detector
 cd ~/wa-detector
 ```
 
-Salin seluruh isi proyek ini ke `~/wa-detector`, lalu:
+Salin seluruh isi proyek ini ke `~/wa-detector`, atau bila sudah meng-clone repo jalankan `git pull`, lalu:
 
 ```sh
 npm install
@@ -39,4 +39,4 @@ Salin `.env.example` ke `.env`. `ALLOWED_SENDERS` wajib diatur sebagai daftar no
 
 API `onWhatsApp()` tidak merupakan kontrak resmi WhatsApp dan dapat dibatasi, berubah, atau tidak tersedia. Implementasi tidak mengirim otomatis ke nomor sasaran. Bila pemeriksaan API tidak ada di versi yang dijalankan, bot memberi pesan bahwa fitur tidak tersedia. Tidak ada jaminan operasi massal aman; gunakan batch kecil untuk tujuan yang sah dan patuhi aturan WhatsApp.
 
-Gunakan Node.js 20 atau lebih baru. Baileys 6.7.23 mensyaratkan Node >=20. Bila sesi kadaluarsa, periksa terminal; jangan hapus data sesi untuk error koneksi sementara. Reconnect otomatis hanya untuk pemutusan non-logout dan hanya satu socket dibuat setiap saat.
+Gunakan Node.js 20 atau lebih baru. Baileys 6.7.23 mensyaratkan Node >=20. Sebelum membuat socket, bot mengambil versi WhatsApp Web terbaru menggunakan `fetchLatestBaileysVersion()` karena versi bawaan Baileys bisa tertinggal dan ditolak server sebagai `405 Connection Failure`. Tes koneksi dari sandbox dengan versi dinamis terbaru berhasil menerima event QR; jaringan/perangkat pengguna tetap dapat memberi hasil berbeda. Bila terjadi pemutusan, terminal sekarang menampilkan kode status dan detail aman seperti lokasi/reason. Bila sesi kadaluarsa, periksa terminal; jangan hapus data sesi untuk error koneksi sementara. Reconnect otomatis hanya untuk pemutusan non-logout dan hanya satu socket dibuat setiap saat.

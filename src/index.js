@@ -1,4 +1,4 @@
-import makeWASocket, { DisconnectReason, useMultiFileAuthState } from '@whiskeysockets/baileys'
+import makeWASocket, { DisconnectReason, fetchLatestBaileysVersion, useMultiFileAuthState } from '@whiskeysockets/baileys'
 import P from 'pino'
 import qrcode from 'qrcode-terminal'
 import { Boom } from '@hapi/boom'
@@ -39,7 +39,9 @@ async function connect() {
   connecting = true
   try {
     const { state, saveCreds } = await useMultiFileAuthState(config.authDir)
-    const sock = makeWASocket({ auth: state, logger, printQRInTerminal: false, connectTimeoutMs: 30_000 })
+    const { version } = await fetchLatestBaileysVersion()
+    console.log(`Memakai versi WhatsApp Web ${version.join('.')}.`)
+    const sock = makeWASocket({ auth: state, version, logger, printQRInTerminal: false, connectTimeoutMs: 30_000 })
     activeSocket = sock
     sock.ev.on('creds.update', saveCreds)
     sock.ev.on('connection.update', ({ connection, qr, lastDisconnect }) => {
@@ -50,7 +52,15 @@ async function connect() {
       if (connection === 'open') console.log('Terhubung ke WhatsApp.')
       if (connection === 'close') {
         if (activeSocket === sock) activeSocket = null
-        const code = (lastDisconnect?.error instanceof Boom ? lastDisconnect.error.output?.statusCode : lastDisconnect?.error?.output?.statusCode)
+        const disconnectError = lastDisconnect?.error
+        const code = (disconnectError instanceof Boom ? disconnectError.output?.statusCode : disconnectError?.output?.statusCode)
+        const detail = {
+          statusCode: code,
+          message: disconnectError?.message,
+          reason: disconnectError?.data?.reason,
+          location: disconnectError?.data?.location
+        }
+        console.error('Detail koneksi terputus:', JSON.stringify(detail))
         if (code === DisconnectReason.loggedOut) {
           console.error('Sesi telah logout. Data sesi dipertahankan; untuk login ulang, logout perangkat ini lalu hapus auth_info secara manual.')
           return
